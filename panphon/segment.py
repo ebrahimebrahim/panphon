@@ -168,17 +168,20 @@ class Segment(object):
         """
         return self.hamming_distance(other) / len(self.names)
 
-    def weighted_distance(self, other):
+    def weighted_distance(self, other, weights=None):
         """Compute weighted distance
 
         Args:
             other (Segment): object to compare with `self`
+            weights (list of floats): ordered list weights for the different features
+                                      defaults to the weights in data/feature_weights.csv
 
         Returns:
             float: the weighted distance between the two vectors
         """
+        if weights is None: weights=self.weights
         return sum([abs(a - b) * c for (a, b, c)
-                   in zip(self.numeric(), other.numeric(), self.weights)])
+                   in zip(self.numeric(), other.numeric(), weights)])
 
     def norm_weighted_distance(self, other):
         """Compute weighted distance, normalized by vector length
